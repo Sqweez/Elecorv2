@@ -1,0 +1,157 @@
+<template>
+    <v-card>
+        <v-card-title>
+            {{ title }}
+        </v-card-title>
+        <v-card-text>
+            <div class="clients-details">
+                <!-- <v-btn color="primary" class="button-add" @click="openModal">
+                    <v-icon left>mdi-ticket-confirmation</v-icon>
+                    Добавить автоплатеж
+                </v-btn> -->
+
+                <v-spacer></v-spacer>
+
+                <div
+                    v-if="!recurrings"
+                    class="text-center d-flex align-items-center justify-content-center"
+                    style="min-height: 651px"
+                >
+                    <v-progress-circular
+                        indeterminate
+                        size="65"
+                        color="primary"
+                    ></v-progress-circular>
+                </div>
+
+                <v-text-field
+                    v-if="recurrings"
+                    v-model="search"
+                    outlined
+                    solo
+                    clearable
+                    append-icon="mdi-magnify"
+                    label="Поиск по автоплатежам"
+                    single-line
+                    hide-details
+                ></v-text-field>
+            </div>
+            <v-data-table
+                v-if="recurrings"
+                @click:row="rowClick"
+                no-results-text="Нет результатов"
+                no-data-text="Нет данных"
+                :page="1"
+                @update:page="updatePage"
+                :footer-props="{
+                    'items-per-page-options': [
+                        10,
+                        15,
+                        { text: 'Все', value: -1 }
+                    ],
+                    'items-per-page-text': 'Записей на странице'
+                }"
+                :headers="headers"
+                :items="recurrings"
+                :search="search"
+            >
+                <template
+                    slot="footer.page-text"
+                    slot-scope="{ pageStart, pageStop, itemsLength }"
+                >
+                    {{ pageStart }}-{{ pageStop }} из {{ itemsLength }}
+                </template>
+            </v-data-table>
+        </v-card-text>
+        <!-- <add-promo-code-modal
+            :state="showAddRecurringModal"
+            :several="several"
+            v-on:onSave="saveRecurring"
+            v-on:onClose="closeModal"
+        /> -->
+    </v-card>
+</template>
+
+<script>
+import showToast from '../../utils/Toast'
+import GETTERS from '../../store/getters'
+import ACTIONS from '../../store/actions'
+import AddPromoCodeModal from '../Modals/AddPromoCodeModal/AddPromoCodeModal'
+
+export default {
+    components: {
+        AddPromoCodeModal
+    },
+    props: {
+        title: {
+            type: String,
+            default: 'Данные'
+        }
+    },
+    computed: {
+        recurrings() {
+            return this.$store.getters[GETTERS.RECURRINGS]
+        }
+    },
+    data: () => ({
+        showAddRecurringModal: false,
+        showLoader: false,
+        search: '',
+        headers: [
+            {
+                text: 'Paybox id',
+                value: 'paybox_id'
+            },
+            {
+                text: 'Имя пользователя',
+                value: 'fullname'
+            },
+            {
+                text: 'Сумма',
+                value: 'sum'
+            },
+            {
+                text: 'Следующий платеж',
+                value: 'next_payment'
+            },
+            {
+                text: 'Дата создания',
+                value: 'created_at'
+            }
+        ]
+    }),
+    methods: {
+        async rowClick({ id, package_id }) {
+            // await this.$router.push({
+            //     name: "PromoCodes.showPromoCode",
+            //     params: { packageid: package_id || -1, id: id }
+            // });
+        },
+        updatePage(page) {
+            this.$store.commit('setCurrentPage', page)
+        },
+        async saveRecurring() {
+            this.closeModal()
+            this.$store.dispatch(ACTIONS.GET_RECURRINGS)
+            showToast('Автоплатеж успешно добавлен!')
+        },
+        openModal() {
+            this.showAddRecurringModal = true
+        },
+        closeModal() {
+            this.showAddRecurringModal = false
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.clients-details {
+    margin: 4px 16px 8px;
+}
+
+.button-add {
+    margin: 10px 0;
+    width: 240px;
+}
+</style>
