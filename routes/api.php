@@ -27,7 +27,7 @@ Route::middleware([DebugApi::class])->group(function () {
             Route::get('types', 'Api\ClientController@getTypes');
             Route::post('create_clients', 'Api\ClientController@createClients');
             Route::put('push/{client}', 'Api\ClientController@push');
-            Route::patch('update/{client}', 'Api\ClientController@updateClient');
+            Route::patch('update/{id}', 'Api\ClientController@updateClient');
             Route::post('push', 'Api\ClientController@push');
             Route::delete('transaction/{transaction}', 'Api\ClientController@deleteTransaction');
             Route::get('genders', 'Api\ClientController@getGenders');
