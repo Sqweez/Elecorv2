@@ -55,6 +55,16 @@
                 :items="certificates"
                 :search="search"
             >
+                <template v-slot:item.is_paid="{ item }">
+                    <v-icon :color="item.is_paid ? 'success' : 'error'">
+                        {{ item.is_paid ?  'mdi-check' : 'mdi-close' }}
+                    </v-icon>
+                </template>
+                <template v-slot:item.active="{ item }">
+                    <v-icon :color="item.active ? 'success' : 'error'">
+                        {{ item.active ?  'mdi-check' : 'mdi-close' }}
+                    </v-icon>
+                </template>
                 <template
                     slot="footer.page-text"
                     slot-scope="{ pageStart, pageStop, itemsLength }"
@@ -84,7 +94,7 @@ export default {
     props: {
         title: {
             type: String,
-            default: "Данные"
+            default: 'Данные'
         }
     },
     computed: {
@@ -117,6 +127,14 @@ export default {
             {
                 text: "Источник",
                 value: "source.name"
+            },
+            {
+                text: 'Оплачен',
+                value: 'is_paid'
+            },
+            {
+                text: 'Активирован',
+                value: 'active'
             },
             {
                 text: "Дата создания",

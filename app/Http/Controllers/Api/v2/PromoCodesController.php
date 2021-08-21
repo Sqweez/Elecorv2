@@ -13,9 +13,7 @@ class PromoCodesController extends Controller
 {
     public function index()
     {
-        return ResourcesPromoCodes::collection(
-            PromoCodes::with('package')->orderByDesc('id')->get()
-        );
+		return PromoCodes::with('package')->orderByDesc('id')->get();
     }
 
     public function store(Request $request)
@@ -38,9 +36,18 @@ class PromoCodesController extends Controller
                     ]
                 ));
             }
-        } else {
-            return PromoCodes::create($request->all());
+
+            return null;
         }
+
+        if ($request->has('wordpress')) {
+			foreach ($request->get('data') as $item) {
+				PromoCodes::create($item);
+        	}
+			return null;
+		}
+
+		return PromoCodes::create($request->all());
     }
 
     public function show($id)

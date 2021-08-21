@@ -168,8 +168,14 @@ Route::middleware([DebugApi::class])->group(function () {
                 Route::get('url', [SyncController::class, 'getUrl']);
             });
 
+            /*
+             * ГОВНИЩЕ
+             *  */
+
             Route::resource('promo-codes', 'Api\v2\PromoCodesController');
             Route::resource('promo-codes-packages', 'Api\v2\PromoCodesPackagesController');
+            // Пометить сертификат как оплаченный
+			Route::get('/certificates/paid', 'Api\v2\CertificatesController@makeCertificatePaid');
             Route::resource('certificates', 'Api\v2\CertificatesController');
             Route::resource('sources', 'Api\v2\SourcesController');
 

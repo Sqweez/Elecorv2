@@ -62,30 +62,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Certificates extends Model
 {
-    protected $fillable = [
-        'source_id',
-        'name',
-        'promocode',
-        'active',
-        'certificate_lastname',
-        'certificate_firstname',
-        'certificate_patronymic',
-        'certificate_phone',
-        'certificate_months',
-        'certificate_sum',
-        'contact_lastname',
-        'contact_firstname',
-        'contact_patronymic',
-        'contact_phone'
-    ];
+	protected $guarded = [
+		'id'
+	];
 
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format('d.m.Y');
-    }
+	protected $casts = [
+		'is_paid' => 'boolean',
+		'active' => 'boolean'
+	];
 
-    public function source()
-    {
-        return $this->belongsTo(Sources::class);
-    }
+	protected function serializeDate(DateTimeInterface $date)
+	{
+		return $date->format('d.m.Y');
+	}
+
+	public function source()
+	{
+		return $this->belongsTo(Sources::class);
+	}
 }

@@ -11,7 +11,13 @@ class CertificatesController extends Controller
 {
     public function index()
     {
-        return ResourcesCertificates::collection(Certificates::with('source')->orderByDesc('id')->get());
+        return ResourcesCertificates::collection(
+        	Certificates::query()
+				->with('source')
+				->orderByDesc('id')
+				->select(['id', 'name', 'source_id', 'active', 'is_paid', 'created_at'])
+				->get()
+		);
     }
 
     public function show($id)
@@ -37,5 +43,11 @@ class CertificatesController extends Controller
     {
         Certificates::find($id)->delete();
         return 'Сертификат удален';
+    }
+
+	public function makeCertificatePaid(Request $request) {
+		Certificates::whereWpCertificateId($request->get('id'))->update([
+			'is_paid' => true
+		]);
     }
 }

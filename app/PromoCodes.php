@@ -44,17 +44,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PromoCodes extends Model
 {
-    protected $fillable = [
-        'package_id',
-        'name',
-        'promocode',
-        'fixed_discount',
-        'discount',
-        'limit',
-        'activated_count',
-        'timeless',
-        'expired_at'
-    ];
+    protected $guarded = ['id'];
 
     protected function serializeDate(DateTimeInterface $date)
     {
