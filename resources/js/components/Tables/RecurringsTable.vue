@@ -36,6 +36,12 @@
                     hide-details
                 ></v-text-field>
             </div>
+            <v-select
+                :items="clientFilters"
+                v-model="clientFilter"
+                item-text="name"
+                item-value="id"
+            />
             <v-data-table
                 v-if="recurrings"
                 @click:row="rowClick"
@@ -60,6 +66,7 @@
                     <v-btn icon @click="showClientPage(item)" v-if="item.client">
                         <v-icon>mdi-eye</v-icon>
                     </v-btn>
+                    <v-icon v-else color="error">mdi-close</v-icon>
                 </template>
                 <template v-slot:item.is_active="{ item }">
                     <v-icon :color="item.is_active ? 'success' : 'error'">
@@ -71,7 +78,8 @@
                         {{ item.connection.trademark }} ({{ item.connection.personal_account }})
                     </span>
                     <span v-else>
-                        {{ item.personal_account }}
+                        {{ item.personal_account }} <v-icon color="error">mdi-close</v-icon>
+
                     </span>
                 </template>
                 <template
@@ -109,13 +117,37 @@ export default {
     },
     computed: {
         recurrings() {
-            return this.$store.getters[GETTERS.RECURRINGS]
+            return this.$store.getters[GETTERS.RECURRINGS].filter(r => {
+                if (this.clientFilter === 1) {
+                    return r.client;
+                }
+                if (this.clientFilter === 2) {
+                    return r.client === null;
+                }
+
+                return true;
+            })
         }
     },
     data: () => ({
         showAddRecurringModal: false,
         showLoader: false,
         search: '',
+        clientFilter: -1,
+        clientFilters: [
+            {
+                id: -1,
+                name: 'Все'
+            },
+            {
+                id: 1,
+                name: 'С найденными клиентами'
+            },
+            {
+                id: 2,
+                name: 'Не найдены клиенты'
+            }
+        ],
         headers: [
             {
                 text: 'Paybox id',

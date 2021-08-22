@@ -11,7 +11,7 @@ import MUTATIONS from "../mutations";
 
 const recurringsModule = {
     state: {
-        recurrings: null,
+        recurrings: [],
         recurring: null
     },
     getters: {
