@@ -182,6 +182,10 @@ Route::middleware([DebugApi::class])->group(function () {
             Route::prefix('recurrings')->group(function () {
                 Route::get('init', [RecurringsController::class, 'init']);
                 Route::get('submit', [RecurringsController::class, 'submit']);
+                Route::post('wp-create', [RecurringsController::class, 'createRecurringWordpress']);
+                Route::get('disable', [RecurringsController::class, 'disableRecurring']);
+				// Списание рекурентных платажей
+				Route::get('payment', [RecurringsController::class, 'cronRecurring']);
             });
             Route::resource('recurrings', 'Api\v2\RecurringsController');
             Route::resource('managers', 'Api\v2\ManagerController');

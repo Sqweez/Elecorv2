@@ -55,6 +55,25 @@
                 :items="recurrings"
                 :search="search"
             >
+                <template v-slot:item.client="{ item }">
+                    {{ item.client ? item.client.name : item.fullname }}
+                    <v-btn icon @click="showClientPage(item)" v-if="item.client">
+                        <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                </template>
+                <template v-slot:item.is_active="{ item }">
+                    <v-icon :color="item.is_active ? 'success' : 'error'">
+                        {{ item.is_active ? 'mdi-check' : 'mdi-close' }}
+                    </v-icon>
+                </template>
+                <template v-slot:item.service="{ item }">
+                    <span v-if="item.connection">
+                        {{ item.connection.trademark }} ({{ item.connection.personal_account }})
+                    </span>
+                    <span v-else>
+                        {{ item.personal_account }}
+                    </span>
+                </template>
                 <template
                     slot="footer.page-text"
                     slot-scope="{ pageStart, pageStop, itemsLength }"
@@ -103,12 +122,20 @@ export default {
                 value: 'paybox_id'
             },
             {
-                text: 'Имя пользователя',
-                value: 'fullname'
+                text: 'Имя клиента',
+                value: 'client'
+            },
+            {
+                text: 'Услуга',
+                value: 'service'
             },
             {
                 text: 'Сумма',
                 value: 'sum'
+            },
+            {
+                text: 'Активно',
+                value: 'is_active'
             },
             {
                 text: 'Следующий платеж',
@@ -140,6 +167,9 @@ export default {
         },
         closeModal() {
             this.showAddRecurringModal = false
+        },
+        showClientPage(item) {
+            this.$router.push({name: 'clients.show', params: {userId: item.client_id}});
         }
     }
 }

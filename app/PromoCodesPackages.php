@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
 class PromoCodesPackages extends Model
 {
     protected $fillable = ['name'];
-    protected $appends = ['promo_codes_count'];
+    //protected $appends = ['promo_codes_count'];
 
     public function promoCodes()
     {
