@@ -32,7 +32,7 @@ class ClientController extends Controller
 	public function index()
 	{
 
-		return ClientsResource::collection(Client::with(['type', 'connections' => function ($query) {
+		return ClientsResource::collection(Client::with(['type', 'phones', 'connections' => function ($query) {
 			return $query->where('is_deleted', false);
 		}])->get());
 	}

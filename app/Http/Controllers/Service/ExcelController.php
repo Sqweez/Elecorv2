@@ -81,7 +81,6 @@ class ExcelController extends Controller
         collect($clients)->each(function ($item, $key) use ($sheet) {
             $initialIndex = 3;
             $index = $initialIndex + $key;
-            // dd($item['personal_accounts']);
             $sheet->setCellValue('A' . $index, $item['name']);
 		    $sheet->setCellValueExplicit('B' . $index, collect($item['connections'])->pluck('personal_account')->join("\n"), DataType::TYPE_STRING);
             $sheet->getStyle('B' . $index)->getAlignment()->setWrapText(true);
@@ -89,6 +88,8 @@ class ExcelController extends Controller
             $sheet->getStyle('C' . $index)->getAlignment()->setWrapText(true);
             $sheet->setCellValue('D' . $index, collect($item['connections'])->pluck('address')->join("\n"));
             $sheet->getStyle('D' . $index)->getAlignment()->setWrapText(true);
+			$sheet->setCellValue('E' . $index, collect($item['phones'])->pluck('phone')->join("\n"));
+			$sheet->getStyle('E' . $index)->getAlignment()->setWrapText(true);
         });
 
         $writer = new Xlsx($spreadSheet);

@@ -15,6 +15,7 @@ import ACTIONS from "../../../store/actions";
 export default {
     mounted() {
         this.$store.dispatch(ACTIONS.GET_RECURRINGS);
+        this.$store.dispatch(ACTIONS.GET_CLIENTS);
     },
     components: {
         RecurringsTable

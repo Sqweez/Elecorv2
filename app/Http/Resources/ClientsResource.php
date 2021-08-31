@@ -24,7 +24,8 @@ class ClientsResource extends JsonResource
             '_addresses' => $connections->pluck('address')->join(' '),
             '_trademarks' => $connections->pluck('trademark')->join(' '),
             '_personalAccounts' => $connections->pluck('personal_account')->join(' '),
-            'client_type' => intval($this->client_type)
+            'client_type' => intval($this->client_type),
+			'phones' => $this->phones
         ];
     }
 }

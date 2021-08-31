@@ -5,13 +5,6 @@
         </v-card-title>
         <v-card-text>
             <div class="clients-details">
-                <!-- <v-btn color="primary" class="button-add" @click="openModal">
-                    <v-icon left>mdi-ticket-confirmation</v-icon>
-                    Добавить автоплатеж
-                </v-btn> -->
-
-                <v-spacer></v-spacer>
-
                 <div
                     v-if="!recurrings"
                     class="text-center d-flex align-items-center justify-content-center"
@@ -44,7 +37,6 @@
             />
             <v-data-table
                 v-if="recurrings"
-                @click:row="rowClick"
                 no-results-text="Нет результатов"
                 no-data-text="Нет данных"
                 :page="1"
@@ -82,6 +74,13 @@
 
                     </span>
                 </template>
+                <template v-slot:item.actions="{ item }">
+                    <v-btn icon text @click="recurringId = item.id; editModal = true;">
+                        <v-icon>
+                            mdi-pencil
+                        </v-icon>
+                    </v-btn>
+                </template>
                 <template
                     slot="footer.page-text"
                     slot-scope="{ pageStart, pageStop, itemsLength }"
@@ -90,12 +89,11 @@
                 </template>
             </v-data-table>
         </v-card-text>
-        <!-- <add-promo-code-modal
-            :state="showAddRecurringModal"
-            :several="several"
-            v-on:onSave="saveRecurring"
-            v-on:onClose="closeModal"
-        /> -->
+        <EditRecurringModal
+            :state="editModal"
+            :recurring-id="recurringId"
+            @cancel="reccuringId = null; editModal = false;"
+        />
     </v-card>
 </template>
 
@@ -104,10 +102,12 @@ import showToast from '../../utils/Toast'
 import GETTERS from '../../store/getters'
 import ACTIONS from '../../store/actions'
 import AddPromoCodeModal from '../Modals/AddPromoCodeModal/AddPromoCodeModal'
+import EditRecurringModal from "../Modals/EditRecurringModal/EditRecurringModal";
 
 export default {
     components: {
-        AddPromoCodeModal
+        EditRecurringModal
+
     },
     props: {
         title: {
@@ -130,8 +130,8 @@ export default {
         }
     },
     data: () => ({
-        showAddRecurringModal: false,
-        showLoader: false,
+        editModal: false,
+        recurringId: -1,
         search: '',
         clientFilter: -1,
         clientFilters: [
@@ -176,29 +176,21 @@ export default {
             {
                 text: 'Дата создания',
                 value: 'created_at'
+            },
+            {
+                text: 'Действие',
+                value: 'actions'
+            },
+            {
+                text: 'Полное имя',
+                value: 'fullname',
+                align: ' d-none'
             }
         ]
     }),
     methods: {
-        async rowClick({ id, package_id }) {
-            // await this.$router.push({
-            //     name: "PromoCodes.showPromoCode",
-            //     params: { packageid: package_id || -1, id: id }
-            // });
-        },
         updatePage(page) {
             this.$store.commit('setCurrentPage', page)
-        },
-        async saveRecurring() {
-            this.closeModal()
-            this.$store.dispatch(ACTIONS.GET_RECURRINGS)
-            showToast('Автоплатеж успешно добавлен!')
-        },
-        openModal() {
-            this.showAddRecurringModal = true
-        },
-        closeModal() {
-            this.showAddRecurringModal = false
         },
         showClientPage(item) {
             this.$router.push({name: 'clients.show', params: {userId: item.client_id}});

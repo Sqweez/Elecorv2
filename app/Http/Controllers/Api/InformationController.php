@@ -9,9 +9,15 @@ class InformationController extends Controller
 {
     public function getReferralInformation() {
         return "
-            <h1>Информация по реферральной программе:</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias commodi consequatur consequuntur dignissimos distinctio dolore dolorem doloremque dolorum eaque, est explicabo impedit laborum mollitia obcaecati officia pariatur quos repellat sit sunt suscipit ullam veniam veritatis voluptas voluptatem? At aut commodi ea eius expedita nihil placeat, tempore temporibus unde voluptatibus? Atque autem cumque delectus, hic inventore nisi nobis nulla possimus quae quasi quo repellat repellendus veniam? Accusamus amet assumenda commodi excepturi exercitationem fugiat id magni molestiae nulla placeat porro repellat rerum sequi sit sunt ut, veritatis. Ad, assumenda cupiditate ea earum eligendi exercitationem iste maxime perferendis quo rem tempore vel.</p>
-        ";
+            <h1>Копи бонусы и оплачивай ими услуги ОА “ELECOR”!</h1>
+            <h3>Как накопить? </h3>
+            <p>Подключи другу Мобильную Тревожную Кнопку,отправив ему реферальную ссылку на установку, в любой из мессенджеров. За каждого приведённого друга,начисляется 2000 бонусов.</p>
+			<h3>Как пригласить?</h3>
+            <p>Нажми на Кнопку в клиентском приложении «ПРИГЛАСИТЬ ДРУГА»,в всплывающих мессенджерах выбери ,кого хочешь пригласить.Выбранный человек получит ссылку на установку услуги-Мобильная Тревожная Кнопка.</p>
+			<h3>Как узнать сколько бонусов я накопил?</h3>
+        	<p>В личном кабинете ( иконка в верхнем правом углу экрана) Графа  « Мои бонусы»</p>
+			<h3>Как потратить?</h3>
+        	<p>При оплате онлайн , вбейте сумму бонусов, которой вы хотите оплатить услуги, в графу:  «Списать бонусы». Вы можете оплатить 100% стоимости любой услуги  бонусами.</p>";
     }
 
     public function getQRInformation() {

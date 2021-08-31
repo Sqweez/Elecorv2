@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_id
  * @property string|null $comment
  * @property int $is_worked
+ * @property int $type
  * @property string|null $push_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -41,6 +42,10 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+    	'type' => 'integer'
+	];
 
     public function client() {
         return $this->belongsTo('App\Client', 'client_id');

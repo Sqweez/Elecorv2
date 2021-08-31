@@ -49,6 +49,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read mixed $bonuses_sum
  */
 class Client extends Model {
+
     protected $fillable = ['name', 'client_type', 'birth_date', 'comment', 'photo', 'push_token', 'additional_fields', 'lang', 'gender'];
 
     protected $casts = [

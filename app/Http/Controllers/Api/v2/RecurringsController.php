@@ -39,52 +39,7 @@ class RecurringsController extends Controller
 
 		$recurrings->update($request->all());
 
-		return $recurrings;
-	}
-
-	public function destroy($id)
-	{
-		Recurring::find($id)->delete();
-		return 'Автоплатеж удален';
-	}
-
-	public function init(Request $request)
-	{
-		$request->validate([
-			'sum' => 'required',
-			'description' => 'required'
-		]);
-
-		$recurring = Recurring::create([
-			'sum' => $request->input('sum'),
-			'next_payment' => Carbon::now()->addMonth()
-		]);
-
-		$payboxData = [
-			'pg_merchant_id' => config('pg.merchant_id'),
-			'pg_amount' => $recurring->sum,
-			'pg_description' => $request->input('description'),
-			'pg_success_url' => config('pg.success_url'),
-			'pg_salt' => Hash::make(config('pg.secret')),
-			// 'pg_sig' =>
-		];
-
-		return $recurring;
-	}
-
-	public function submit(Request $request)
-	{
-		// $request->validate([
-		//     ''
-		// ]);
-
-		// Recurrings::create($request->all());
-
-		// $payboxData = [
-		//     'pg_merchant_id' => config('pg.merchant_id'),
-		//     'pg_order_id' =>
-		// ];
-		// return 'hello world';
+		return new RecurringResource($recurrings);
 	}
 
 	public function createRecurringWordpress(Request $request) {

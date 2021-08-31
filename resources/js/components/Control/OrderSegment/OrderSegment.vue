@@ -121,7 +121,7 @@
         },
         computed: {
             orders() {
-                return this.$store.getters.orders;
+                return this.$store.getters.orders.filter(o => o.type === 1);
             },
             user() {
                 return this.$store.getters.user;

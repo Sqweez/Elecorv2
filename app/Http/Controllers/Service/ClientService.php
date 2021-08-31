@@ -14,7 +14,7 @@ class ClientService {
         $all_client_types = !$request->has('client_types');
         $client_types = explode(',', $request->get('client_types', ''));
 
-        $clientQuery = Client::query()->with(['type', 'connections']);
+        $clientQuery = Client::query()->with(['type', 'connections', 'phones']);
 
         $clientQuery->when(!$all_client_types, function ($query) use ($client_types) {
             return $query->whereIn('client_type', $client_types);

@@ -5,7 +5,7 @@ import MUTATIONS from "../mutations";
 
 const orderModule = {
     state: {
-        orders: null
+        orders: []
     },
     getters: {
         [GETTERS.ORDERS](state) {

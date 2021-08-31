@@ -5,6 +5,12 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class User
+ *
+ * @mixin \App\Order
+ * */
+
 class OrderResource extends JsonResource
 {
     /**
@@ -28,7 +34,8 @@ class OrderResource extends JsonResource
             'is_worked' => !!$this->is_worked,
             'comment' => $this->comment,
             'phone' => $this->phone,
-            'client_comment' => $this->client_comment
+            'client_comment' => $this->client_comment,
+			'type' => $this->type,
         ];
     }
 }

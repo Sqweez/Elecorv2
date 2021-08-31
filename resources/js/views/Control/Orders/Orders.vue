@@ -12,10 +12,18 @@
                     <v-btn style="width: 300px;" depressed :color="currentSegment === 'feedback' ? 'primary' : ''"
                            @click="currentSegment = 'feedback'">Обратная связь
                     </v-btn>
+                    <v-btn style="width: 300px;" depressed :color="currentSegment === 'orders_popup' ? 'primary' : ''"
+                           @click="currentSegment = 'orders_popup'">Заявки с попапов
+                    </v-btn>
+                    <v-btn style="width: 300px;" depressed :color="currentSegment === 'orders_web' ? 'primary' : ''"
+                           @click="currentSegment = 'orders_web'">Заявки с сайта
+                    </v-btn>
                 </div>
                 <div class="p-4">
                     <OrderSegment v-if="currentSegment === 'orders'"/>
-                    <FeedbackSegment v-else/>
+                    <FeedbackSegment v-if="currentSegment === 'feedback'"/>
+                    <OrderPopupSegment v-if="currentSegment === 'orders_popup'"/>
+                    <OrderWebSegment v-if="currentSegment === 'orders_web'"/>
                 </div>
 
             </v-card-text>
@@ -26,10 +34,12 @@
 <script>
     import FeedbackSegment from "@/components/Control/FeedbackSegment/FeedbackSegment";
     import OrderSegment from "@/components/Control/OrderSegment/OrderSegment";
-    import ACTIONS from "../../../store/actions";
+    import OrderPopupSegment from "@/components/Control/OrderSegment/OrderPopupSegment";
+    import OrderWebSegment from "@/components/Control/OrderSegment/OrderWebSegment";
+    import ACTIONS from "@/store/actions";
     export default {
         components: {
-            FeedbackSegment, OrderSegment,
+            FeedbackSegment, OrderSegment, OrderPopupSegment, OrderWebSegment
         },
         async mounted() {
             await this.$store.dispatch(ACTIONS.GET_ORDERS);

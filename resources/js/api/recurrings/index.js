@@ -15,11 +15,8 @@ export async function getRecurringById(id) {
     return data;
 }
 
-export async function editRecurring(recurring) {
-    const { data } = await axios.patch(
-        `/api/v2/recurrings/${recurring.id}`,
-        recurring
-    );
+export async function editRecurring({recurring, id}) {
+    const { data } = await axios.patch(`/api/v2/recurrings/${id}`, recurring);
     return data;
 }
 

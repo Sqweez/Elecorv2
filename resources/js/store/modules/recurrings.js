@@ -28,6 +28,14 @@ const recurringsModule = {
         },
         [MUTATIONS.SET_RECURRING](state, payload) {
             state.recurring = payload;
+        },
+        [MUTATIONS.EDIT_RECURRING](state, payload) {
+            state.recurrings = state.recurrings.map(r => {
+                if (r.id === payload.id) {
+                    r = payload;
+                }
+                return r;
+            })
         }
     },
     actions: {
@@ -42,8 +50,13 @@ const recurringsModule = {
             const response = await getRecurringById(payload);
             await commit(MUTATIONS.SET_RECURRING, response);
         },
-        async [ACTIONS.EDIT_RECURRING](_, payload) {
-            return await editRecurring(payload);
+        async [ACTIONS.EDIT_RECURRING]({ commit }, payload) {
+            try {
+                const data = await editRecurring(payload);
+                commit(MUTATIONS.EDIT_RECURRING, data);
+            } catch (e) {
+                throw e;
+            }
         },
         async [ACTIONS.DELETE_RECURRING](_, payload) {
             await deleteRecurring(payload);

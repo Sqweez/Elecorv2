@@ -30,6 +30,7 @@ class ExportController extends Controller
     {
         $debts = DebtResource::collection(DebtService::getDebtsOld($request));
         $excelService = new ExcelController();
-        return $excelService->exportDebts($debts);
+		return Response::download($excelService->exportDebts($debts));
+		return $excelService->exportDebts($debts);
     }
 }
