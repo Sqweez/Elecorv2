@@ -36,6 +36,9 @@ const recurringsModule = {
                 }
                 return r;
             })
+        },
+        [MUTATIONS.DELETE_RECURRING](state, payload) {
+            state.recurrings = state.recurrings.filter(r => r.id !== payload);
         }
     },
     actions: {
@@ -43,7 +46,7 @@ const recurringsModule = {
             const response = await getRecurrings();
             await commit(MUTATIONS.SET_RECURRINGS, response);
         },
-        async [ACTIONS.CREATE_RECURRING](_, recurring) {
+        async [ACTIONS.CREATE_RECURRING]({ }, recurring) {
             await createRecurring(recurring);
         },
         async [ACTIONS.GET_RECURRING]({ commit }, payload) {
@@ -58,8 +61,9 @@ const recurringsModule = {
                 throw e;
             }
         },
-        async [ACTIONS.DELETE_RECURRING](_, payload) {
+        async [ACTIONS.DELETE_RECURRING]({ commit }, payload) {
             await deleteRecurring(payload);
+            commit(MUTATIONS.DELETE_RECURRING, payload)
         }
     }
 };

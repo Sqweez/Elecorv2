@@ -180,6 +180,7 @@ Route::middleware([DebugApi::class])->group(function () {
             Route::resource('sources', 'Api\v2\SourcesController');
 
             Route::prefix('recurrings')->group(function () {
+            	Route::delete('{id}', [RecurringsController::class, 'destroy']);
                 Route::get('init', [RecurringsController::class, 'init']);
                 Route::get('submit', [RecurringsController::class, 'submit']);
                 Route::post('wp-create', [RecurringsController::class, 'createRecurringWordpress']);
@@ -190,13 +191,6 @@ Route::middleware([DebugApi::class])->group(function () {
             Route::resource('recurrings', 'Api\v2\RecurringsController');
             Route::resource('managers', 'Api\v2\ManagerController');
             Route::resource('manager-history', 'Api\v2\ManagerHistoryController');
-
-            Route::prefix('site')->group(function () {
-                Route::prefix('auth')->group(function () {
-                    Route::post('send-sms', 'Api\SiteController@sendSms');
-                    Route::post('confirm-sms', 'Api\SiteController@confirmSms');
-                });
-            });
         });
     });
 });

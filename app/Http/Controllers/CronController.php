@@ -38,7 +38,7 @@ class CronController extends Controller
             Payment::create($payment);
             Transaction::create($transaction);
 
-            $message = [
+            /*$message = [
                 'title' => 'Внимание',
                 'body' => 'Уважаемый абонент! В соответствии с договором, Вам начислена абонентская плата в размере' . $connection["price"] . '. Просим Вас оплатить в ближайшее время.
                 Если оплата уже произведена,просим Вас проигнорировать данное сообщение.'
@@ -48,7 +48,7 @@ class CronController extends Controller
 
             if (strlen($token) > 0) {
                 PushService::sendPush($message, $token);
-            }
+            }*/
         }
 
         return 'success' . $count;

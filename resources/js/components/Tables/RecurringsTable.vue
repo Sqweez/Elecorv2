@@ -80,6 +80,11 @@
                             mdi-pencil
                         </v-icon>
                     </v-btn>
+                    <v-btn icon color="error" @click="recurringId = item.id; deleteModal = true;">
+                        <v-icon>
+                            mdi-close
+                        </v-icon>
+                    </v-btn>
                 </template>
                 <template
                     slot="footer.page-text"
@@ -89,23 +94,31 @@
                 </template>
             </v-data-table>
         </v-card-text>
+        <ConfirmationModal
+            :state="deleteModal"
+            message="Вы действительно хотите удалить выбранный автоплатеж?"
+            @cancel="recurringId = -1; deleteModal = false;"
+            @confirm="deleteRecurring"
+        />
         <EditRecurringModal
             :state="editModal"
             :recurring-id="recurringId"
             @cancel="reccuringId = null; editModal = false;"
+            @confirm="deleteRecurring"
         />
     </v-card>
 </template>
 
 <script>
-import showToast from '../../utils/Toast'
 import GETTERS from '../../store/getters'
-import ACTIONS from '../../store/actions'
-import AddPromoCodeModal from '../Modals/AddPromoCodeModal/AddPromoCodeModal'
 import EditRecurringModal from "../Modals/EditRecurringModal/EditRecurringModal";
+import ConfirmationModal from "@/components/Modals/ConfirmationModal/ConfirmationModal";
+import ACTIONS from "@/store/actions";
+import showToast from "@/utils/Toast";
 
 export default {
     components: {
+        ConfirmationModal,
         EditRecurringModal
 
     },
@@ -130,6 +143,7 @@ export default {
         }
     },
     data: () => ({
+        deleteModal: false,
         editModal: false,
         recurringId: -1,
         search: '',
@@ -194,6 +208,12 @@ export default {
         },
         showClientPage(item) {
             this.$router.push({name: 'clients.show', params: {userId: item.client_id}});
+        },
+        async deleteRecurring() {
+            await this.$store.dispatch(ACTIONS.DELETE_RECURRING, this.recurringId);
+            this.deleteModal = false;
+            this.recurringId = -1;
+            showToast('Автоплатеж удален');
         }
     }
 }

@@ -42,6 +42,10 @@ class RecurringsController extends Controller
 		return new RecurringResource($recurrings);
 	}
 
+	public function destroy($id) {
+		Recurring::find($id)->delete();
+	}
+
 	public function createRecurringWordpress(Request $request) {
 		$personal_account = $request->get('personal_account');
 		$connection = Connection::wherePersonalAccount($personal_account)->first();

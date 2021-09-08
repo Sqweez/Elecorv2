@@ -52,6 +52,8 @@ class Order extends Model
     }
 
     public function service() {
-        return $this->belongsTo('App\MobileService', 'service_id');
+        return $this->belongsTo('App\MobileService', 'service_id')->withDefault([
+        	'name' => ''
+		]);
     }
 }

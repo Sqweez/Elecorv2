@@ -57,6 +57,7 @@ const MUTATIONS = {
     SET_RECURRINGS: 'setRecurrings',
     SET_RECURRING: 'setRecurring',
     EDIT_RECURRING: 'EDIT_RECURRING',
+    DELETE_RECURRING: 'DELETE_RECURRING',
 
     SET_MANAGERS: 'setManagers',
     SET_MANAGER: 'setManager',
