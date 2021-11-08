@@ -173,7 +173,6 @@
                 let transactions = this.history.transactions;
                 if (this.filter === 0) {
                     date = moment().subtract(6, 'months');
-                    console.log(date);
                     return transactions.filter(p => {
                         let p_date = moment(p.created_at);
                         return moment(p_date).isAfter(moment(date)) || moment(p_date).isSame(moment(date), 'day');

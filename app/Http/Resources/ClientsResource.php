@@ -25,7 +25,8 @@ class ClientsResource extends JsonResource
             '_trademarks' => $connections->pluck('trademark')->join(' '),
             '_personalAccounts' => $connections->pluck('personal_account')->join(' '),
             'client_type' => intval($this->client_type),
-			'phones' => $this->phones
+			'phones' => $this->phones,
+			'has_recurring' => $this->recurrings_count > 0
         ];
     }
 }

@@ -32,9 +32,10 @@ class ClientController extends Controller
 	public function index()
 	{
 
-		return ClientsResource::collection(Client::with(['type', 'phones', 'connections' => function ($query) {
-			return $query->where('is_deleted', false);
-		}])->get());
+		return ClientsResource::collection(
+			Client::with(['type', 'phones', 'connections' => function ($query) {
+				return $query->where('is_deleted', false);
+			}])->withCount('recurrings')->orderByDesc('created_at')->get());
 	}
 
 	/**
@@ -202,64 +203,6 @@ class ClientController extends Controller
 		return $mailing_id;
 	}
 
-
-	/*public function parseClients() {
-		$clientsFile = Storage::disk('public')->get('users.json');
-
-		$clientsData = json_decode($clientsFile, true);
-
-		$services = Service::all()->toArray();
-
-		$serviceNames = array_map(function ($i) {
-			return $i['name'];
-		}, $services);
-
-		$clientsData = array_map(function ($i) use ($serviceNames, $services) {
-			$keys = array_keys($i);
-			$index = count($i) - 1;
-			$service = $keys[$index];
-			$service_key = array_search($service, $serviceNames);
-			$service_id = $services[$service_key]['id'];
-			$i['date_start'] = Carbon::parse($i['dogovordatanach'])->format('Y-m-d');
-			$i['service_id'] = $service_id;
-			$i['trademark'] = $services[$service_key]['trademark_default'];
-			$i['client_type'] = $i['vidklienta'] === 'Юридические лица' ? 3 : 1;
-			$i['price'] = intval($i[$service]);;
-			$i['balans'] = intval($i['balans']);
-			return $i;
-		}, $clientsData);
-
-
-		foreach ($clientsData as $clientsDatum) {
-			$name = $clientsDatum['klient'];
-			$client = Client::where('name', $name)->first();
-			$client_id = null;
-			if (!$client) {
-				$client = ['name' => $name, 'client_type' => $clientsDatum['client_type']];
-
-				if (array_key_exists('Телефон', $clientsDatum)) {
-					$phone = [str_replace(' ', '', $clientsDatum['Телефон'])];
-				} else {
-					$phone = [];
-				}
-				$client_id = $this->createClient($client, $phone);
-			} else {
-				$client_id = $client->id;
-			}
-
-			$connection = ['client_id' => $client_id, 'user_id' => 1, 'service_id' => $clientsDatum['service_id'], 'address' => $clientsDatum['ulica'] . " " . $clientsDatum['zdanie'], 'trademark' => $clientsDatum['trademark'], 'personal_account' => $clientsDatum['licshet'], 'price' => $clientsDatum['price'], 'date_start' => $clientsDatum['date_start']];
-
-			$connection_id = Connection::create($connection)->id;
-
-			if ($clientsDatum['balans'] !== 0) {
-				$transaction = ['connection_id' => $connection_id, 'balance_change' => $clientsDatum['balans'], 'user_id' => 1, 'is_visible' => false];
-
-				Transaction::create($transaction);
-
-			}
-		}
-
-	}*/
 
 	public function getDebt(Request $request)
 	{

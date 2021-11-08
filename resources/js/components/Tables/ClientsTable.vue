@@ -117,6 +117,14 @@
                         </li>
                     </ul>
                 </template>
+                <template v-slot:item.has_recurring="{ item }">
+                    <v-icon v-if="item.has_recurring" color="success">
+                        mdi-check
+                    </v-icon>
+                    <v-icon v-else color="error">
+                        mdi-close
+                    </v-icon>
+                </template>
                 <template v-slot:item.trademark="{ item }">
                     <span v-if="!item.connections.length">
                         Данные отсутствуют
@@ -230,8 +238,13 @@ export default {
                 visible: false,
                 align: ' d-none'
             },
+
             { text: 'Лицевой счет', value: 'personalAccount', sortable: false },
             { text: 'Адрес', value: 'address', sortable: false },
+            {
+                text: 'Автоплатеж',
+                value: 'has_recurring',
+            },
             {
                 text: 'Торговое наименование',
                 value: 'trademark',

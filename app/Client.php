@@ -106,6 +106,10 @@ class Client extends Model {
         return $this->bonus_transactions->sum('amount');
     }
 
+	public function recurrings(): \Illuminate\Database\Eloquent\Relations\HasMany {
+		return $this->hasMany(Recurring::class);
+    }
+
     public static function boot() {
         parent::boot();
 

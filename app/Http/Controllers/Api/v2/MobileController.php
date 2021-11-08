@@ -55,7 +55,7 @@ class MobileController extends Controller
             'name' => $client->name,
             'phone' => $client->phones[0]->phone ?? '',
             'bonuses' => $client->bonuses_sum,
-            'connections' => $client->connections->where('is_active', 1)->map(function ($connection) {
+            'connections' => $client->connections->where('is_active', 1)->map(function ($connection, $client) {
                 return [
                     'id' => $connection['id'],
                     'service_id' => intval($connection['service']['id']),
@@ -76,7 +76,11 @@ class MobileController extends Controller
                         [
                             'name' => 'Договор заключен:',
                             'value' => $connection['company']['name']
-                        ]
+                        ],
+						[
+							'name' => 'Автоплатеж',
+							'value' => !!$client['recurrings']
+						]
                     ],
 
                 ];
@@ -104,7 +108,7 @@ class MobileController extends Controller
         $result = $api->call('message', 'sendSMSMessage', [
                 'recipient' => $_phone,
                 'text' => "Код подтверждения ELECOR: " . $code,
-                //'from' => 'ELECOR'
+				'from' => 'OA ELECOR'
             ]
         );
         if ($result) {

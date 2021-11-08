@@ -115,6 +115,16 @@
                         <v-textarea v-if="editMode" class="subject__select" v-model="client.comment"
                                     auto-grow></v-textarea>
                     </div>
+                    <div class="d-flex">
+                        <p class="font-weight-black">Автоплатеж:
+                            <v-icon v-if="client.has_recurring" color="success">
+                                mdi-check
+                            </v-icon>
+                            <v-icon v-else color="error">
+                                mdi-close
+                            </v-icon>
+                        </p>
+                    </div>
                 </v-col>
                 <v-col cols="4" v-if="user.role_id !== 2">
                     <v-row justify="center">

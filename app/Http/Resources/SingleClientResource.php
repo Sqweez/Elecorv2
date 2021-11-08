@@ -36,6 +36,7 @@ class SingleClientResource extends JsonResource
             'physical_person' => $this->client_type === ClientType::CLIENT_TYPE_PHYSICAL,
             'bonus_transactions' => BalanceTransactionResource::collection($this->bonus_transactions->sortByDesc('created_at')),
             'bonuses' => $this->bonus_transactions->sum('amount'),
+			'has_reccuring' => $this->recurrings->count() > 0
         ];
     }
 }
