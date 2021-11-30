@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Service;
 
 use App\Client;
+use App\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,42 @@ class ClientService {
             return $query->where('lang', \request('lang'));
         });
 
-        $clientQuery->when($request->has('service'), function ($query) use ($request) {
+		$clientQuery->with(['connections' => function ($q) use ($request) {
+			$q->when($request->has('price'), function ($query) {
+				return $query->where('price', \request('price'));
+			});
+
+			$q->when($request->has('is_active'), function ($query) {
+				return $query->where('is_active', !!\request('is_active'));
+			});
+
+			$q->when($request->has('company'), function ($query) {
+				return $query->whereIn('company_id', explode(',', \request('company')));
+			});
+
+			$q->when($request->has('startDate'), function ($query) {
+				return $query->whereDate('created_at', '>=', Carbon::parse(\request('startDate'))->toDateString());
+			});
+
+			$q->when($request->has('finishDate'), function ($query) {
+				return $query->whereDate('created_at', '<=', Carbon::parse(\request('finishDate'))->toDateString());
+			});
+
+			$q->when($request->has('is_debtor'), function ($query) {
+				$query->with('transactions');
+			});
+
+			$services =
+				$request->has('service') ?
+					[$request->get('service')] :
+					Service::select(['id'])->get()->pluck('id')->values()->all();
+
+			$q->whereIn('service_id', $services);
+
+			$q->where('is_deleted', 0);
+		}]);
+
+        /*$clientQuery->when($request->has('service'), function ($query) use ($request) {
             return $query->with(['connections' => function ($q) use ($request) {
                 $q->when($request->has('price'), function ($query) {
                     return $query->where('price', \request('price'));
@@ -52,21 +88,13 @@ class ClientService {
 
                 $q->when($request->has('is_debtor'), function ($query) {
                     $query->with('transactions');
-                    /*$query->withCount(['transactions as debt' => function ($q) {
-                        return $q->select(DB::raw("SUM(balance_change) as balance"));
-                    }]);
-
-                    $query->whereHas('transactions', function ($q) {
-                        $expression = intval(\request('is_debtor')) === 1 ? '<' : '>=';
-                        return $q->having(DB::raw("SUM(balance_change)"), $expression, 0);
-                    });*/
                 });
 
                 $q->where('service_id', $request->get('service'));
 
                 $q->where('is_deleted', 0);
             }]);
-        });
+        });*/
 
         $clients = $clientQuery->get();
         if ($request->has('is_debtor')) {

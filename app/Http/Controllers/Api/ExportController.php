@@ -17,20 +17,16 @@ use Illuminate\Support\Facades\Response;
 class ExportController extends Controller
 {
 
-    public function exportClients(Request $request)
-    {
+    public function exportClients(Request $request): \Symfony\Component\HttpFoundation\BinaryFileResponse {
         $clients =  ClientService::getClients($request);
         $clients = ClientsResource::collection($clients);
         $excelService = new ExcelController();
         return Response::download($excelService->exportClients($request, $clients));
-        return $excelService->exportClients($request, $clients);
     }
 
-    public function exportDebts(Request $request)
-    {
+    public function exportDebts(Request $request): \Symfony\Component\HttpFoundation\BinaryFileResponse {
         $debts = DebtResource::collection(DebtService::getDebtsOld($request));
         $excelService = new ExcelController();
 		return Response::download($excelService->exportDebts($debts));
-		return $excelService->exportDebts($debts);
     }
 }

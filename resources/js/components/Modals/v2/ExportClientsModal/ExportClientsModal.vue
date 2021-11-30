@@ -57,7 +57,7 @@
                     item-text="name"
                     v-model="service"
                 />
-                <div v-if="isServiceChosen">
+                <div>
                     <div class="checkbox-container">
                         <p>Тариф:</p>
                         <v-checkbox
@@ -203,8 +203,8 @@
             debtor_client: -1,
             startDate: null,
             finishDate: null,
-            fromProgramStart: false,
-            toToday: false,
+            fromProgramStart: true,
+            toToday: true ,
             company: [],
             today: new Date().toJSON().slice(0, 10),
             startOfUnixEpoch: new Date(0).toJSON().slice(0, 10)
@@ -236,27 +236,27 @@
                     params.lang = this.lang;
                 }
 
+                if (!this.everyPrice) {
+                  params.price = this.price;
+                }
+
+                if (this.active_client !== -1) {
+                  params.is_active = this.active_client;
+                }
+
+                if (this.debtor_client !== -1) {
+                  params.is_debtor = this.debtor_client;
+                }
+
+                if (!this.allCompanySelected) {
+                  params.company = this.company;
+                }
+
+                params.startDate = this.startDate;
+                params.finishDate = this.finishDate;
+
                 if (this.isServiceChosen) {
                     params.service = this.service;
-
-                    if (!this.everyPrice) {
-                        params.price = this.price;
-                    }
-
-                    if (this.active_client !== -1) {
-                        params.is_active = this.active_client;
-                    }
-
-                    if (this.debtor_client !== -1) {
-                        params.is_debtor = this.debtor_client;
-                    }
-
-                    if (!this.allCompanySelected) {
-                        params.company = this.company;
-                    }
-
-                    params.startDate = this.startDate;
-                    params.finishDate = this.finishDate;
                 }
 
                 return params;
@@ -344,10 +344,10 @@
                 this.price = 0;
                 this.active_client = -1;
                 this.debtor_client = -1;
-                this.startDate = null;
-                this.finishDate = null;
-                this.fromProgramStart = false;
-                this.toToday = false;
+                this.startDate = this.startOfUnixEpoch;
+                this.finishDate = this.today;
+                this.fromProgramStart = true;
+                this.toToday = true;
                 this.today = new Date().toJSON().slice(0, 10);
                 this.startOfUnixEpoch = new Date(0).toJSON().slice(0, 10);
             }
